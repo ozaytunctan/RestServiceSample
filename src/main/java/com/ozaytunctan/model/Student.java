@@ -3,9 +3,9 @@ package com.ozaytunctan.model;
 
 import com.ozaytunctan.model.base.BaseEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="Student")
@@ -22,8 +22,27 @@ public class Student extends BaseEntity<Integer> {
     private Integer age;
 
 
+
+    @OneToMany(
+            mappedBy = "student",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Address> addresses = new ArrayList<>();
+
     public Student() {
     }
+
+    public void addAddresses(Address address) {
+        addresses.add(address);
+        address.setStudent(this);
+    }
+
+    public void removeAddresses(Address address) {
+        addresses.remove(address);
+        address.setStudent(null);
+    }
+
 
     public Integer getAge() {
         return age;
